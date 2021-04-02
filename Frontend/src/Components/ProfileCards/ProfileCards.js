@@ -1,18 +1,20 @@
-import React,{useState} from 'react'
+import React,{useState,useEffect} from 'react'
 import TinderCard from 'react-tinder-card';
 import "./ProfileCards.css"
+import axios from "./axios"    //imp here we are importing the axios file not the module
 
 function ProfileCards() {
-    const [people,setPeople] = useState([
+    const [people,setPeople] = useState([]);
+
+    useEffect(() => {
+        
+        async function fetchData()
         {
-            name : "Alan Walker",
-            url : "https://i.pinimg.com/originals/d4/a4/e5/d4a4e53ef5082b6c912b8c8cc859f703.jpg",
-        },
-        {
-            name : "Nobita",
-            url : "https://i.pinimg.com/474x/e9/36/ab/e936ab240156c33be7974c2c36188bdf.jpg",
-        },
-    ]);
+            const req = await axios.get('/NewFriends/card');
+            setPeople(req.data);
+        }
+        fetchData();
+    }, [])
 
     const swiped = (direction,nameToDelete) => {
         console.log("removing" + nameToDelete);
@@ -34,7 +36,7 @@ function ProfileCards() {
                         onSwipe={(dir) => swiped(dir,person.name)}
                         onCardLeftScreen={() => outOfFrame(person.name)}
                      >
-                         <div style={{backgroundImage: "url(" + person.url +")"}} 
+                         <div style={{backgroundImage: "url(" + person.imgUrl +")"}} 
                               className="card">
                             <h3>{person.name}</h3>
                          </div>
